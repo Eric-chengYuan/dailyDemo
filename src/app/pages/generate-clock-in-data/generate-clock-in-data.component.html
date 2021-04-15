@@ -1,0 +1,63 @@
+<nz-row nzGutter="8">
+  <div nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="6">
+    人员ID<span style="color: red;">（*必填项）</span>：
+    <input nz-input [(ngModel)]="id" placeholder="输入需要生成的人员ID">
+    文件名<span style="color: red;">（*必填项）</span>: <input nz-input [(ngModel)]="name">
+    起始时间<span style="color: blue;">（不填默认2019-09-30）</span>：<input nz-input [(ngModel)]="beginDate"
+      placeholder="输入格式： yyyy-mm-dd">
+    需要生成的天数<span style="color: red;">（*必填项)</span>：<input nz-input [(ngModel)]="days" placeholder="可以输入想要的数字，比如半个月即15">
+  </div>
+
+  <div nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="6">
+    <nz-card style="width:300px;" nzTitle="每日打卡时间" [nzExtra]="extraTemplate">
+      <ng-container *ngFor="let item of dailyClockInSet">
+        <button nz-button (click)="deleteDate(item,'daily')">{{item}} x</button>&nbsp;
+      </ng-container>
+    </nz-card>
+    <ng-template #extraTemplate>
+      <nz-time-picker [(ngModel)]="dailyClockIn" (ngModelChange)="addDate($event, 'daily')" nzFormat="HH:mm:ss">
+      </nz-time-picker>
+    </ng-template>
+  </div>
+
+  <div nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="6">
+    <nz-card style="width:300px;" nzTitle="周六打卡时间" [nzExtra]="extraSaturdayTemplate">
+      <ng-container *ngFor="let item of saturdayClockInSet">
+        <button nz-button (click)="deleteDate(item,'saturday')">{{item}} x</button>&nbsp;
+      </ng-container>
+    </nz-card>
+    <ng-template #extraSaturdayTemplate>
+      <nz-time-picker [(ngModel)]="saturdayClockIn" (ngModelChange)="addDate($event, 'saturday')"></nz-time-picker>
+    </ng-template>
+  </div>
+
+  <div nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="6">
+    <nz-card style="width:300px;" nzTitle="假期时间" [nzExtra]="extraVocationTemplate">
+      <ng-container *ngFor="let item of vocationDatesSet">
+        <button nz-button (click)="deleteDate(item,'vocation')">{{item}} x</button>&nbsp;
+      </ng-container>
+    </nz-card>
+    <ng-template #extraVocationTemplate>
+      <nz-date-picker [(ngModel)]="vocationDates" (ngModelChange)="addDate($event,'vocation')"></nz-date-picker>
+    </ng-template>
+  </div>
+
+</nz-row>
+
+<div nz-row nzGutter="[8,8]" style="margin-top: 16px;">
+  <div nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="10">
+    <button nz-button (click)='id && days&& name?generateDate():alert()'>考勤生成</button>&nbsp;&nbsp;&nbsp;&nbsp;
+    <button nz-button
+      (click)='id && days && name?generateDateIncludeSaturday(): alert()'>考勤生成(含周六)</button>&nbsp;&nbsp;&nbsp;&nbsp;
+      <button nz-button nzType="primary" (click)="openTipsModel()">操作提示</button> 
+  </div>
+</div>
+
+<nz-modal [(nzVisible)]="isVisible" nzTitle="考勤模拟数据生成步骤与提示" (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()">
+  <ng-container *nzModalContent>
+    <div nz-row >
+      <img src="./../../../../assets/img/generate_date.png" alt="">
+</div>
+  </ng-container>
+</nz-modal>
+

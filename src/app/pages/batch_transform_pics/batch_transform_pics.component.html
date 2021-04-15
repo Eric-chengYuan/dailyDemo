@@ -1,0 +1,66 @@
+<div nz-row nzGutter="8" id="toolbar" class="tool_bar">
+  <div nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="2">
+    <input type="file" accept=".xls,.xlsx,.csv" #upload_id id="upload_pics" multiple (change)="uploadExcel($event)"
+      hidden>
+    <button nz-button accept=".jpg, .png ,.jpeg" (click)="upload_id.click()">
+      <i nz-icon nzType="file-excel" nzTheme="outline"></i>上传名单
+    </button>
+  </div>
+
+  <div nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="2">
+    <input type="file" #upload_pics id="upload_pics" multiple (change)="uploadPics($event)" hidden>
+    <button nz-button (click)="idsArr.length > 0 ? upload_pics.click() : noEmployeeAlert();">
+      <i nz-icon nzType="upload" nzTheme="outline"></i>上传图片
+    </button>
+  </div>
+  
+  <div nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="2">
+    <button nz-button (click)="convertCanvasToImage()">
+      <i nz-icon nzType="download" nzTheme="outline"></i> 下载图片
+    </button>
+  </div>
+
+  <div nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="2">
+    <button nz-button (click)="downloadExcel('employee')">
+      <i nz-icon nzType="file-excel" nzTheme="outline"></i>名单范例
+    </button>
+  </div>
+
+  <div nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="10">
+    宽：<input nz-input class="size_input" [(ngModel)]="width">
+    高：<input nz-input class="size_input" [(ngModel)]="height">
+    <button nz-button class="button_margin" (click)="convertImageToCanvas(false)">更改尺寸 </button>
+    <button nz-button nzType="primary" class="button_margin"
+      (click)="createTplModal(tplTitle, tplContent, tplFooter)">操作提示</button>
+  </div>
+</div>
+
+<div nz-row class="canvas_part">
+  <ng-container *ngFor="let item of idsArr; let i = index">
+    <div nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="6">
+      <div class="canvas">
+        <canvas [id]="item.value" width="300px" height="300px"></canvas>
+      </div>
+      <input nz-input class="name_input" [(ngModel)]="item.value">
+      <button nz-button (click)="converCanvasToImageOne(item.value)">
+        <i nz-icon nzType="download" nzTheme="outline"></i>
+      </button>
+    </div>
+  </ng-container>
+</div>
+
+<ng-template #tplContent let-params>
+  <div nz-row >
+        <img src="./../../../../assets/img/batch_pics_1.jpg" alt="">
+  </div>
+</ng-template>
+
+<ng-template #tplTitle>
+  <div nz-row>
+    <span>批量处理步骤与提示</span>
+  </div>
+</ng-template>
+
+<ng-template #tplFooter let-ref="modalRef">
+    <button nz-button nzType="primary" (click)="ref.destroy()">Close</button>
+</ng-template>

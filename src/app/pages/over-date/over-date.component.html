@@ -1,0 +1,57 @@
+<div nz-row nzGutter="8" id="toolbar">
+  <div nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="3">
+    <input #upload_sap type="file" (change)="onFileChange($event, 'sap')" multiple="false" hidden />
+    <button nz-button (click)="upload_sap.click()">
+      <i nz-icon nzType="file-excel" nzTheme="outline"></i>上传出勤明细报表</button>
+  </div>
+
+  <div nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="3">
+    <button nz-button (click)="downloadExcel('sap_demo')" >生成随机出勤数据</button>
+  </div>
+
+  <div nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="3">
+    <button nz-button (click)="filterFn()" >超过七天的员工</button>
+  </div>
+  <div nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="3">
+    <button nz-button (click)="findAll()" >所有数据</button>
+  </div>
+
+  <div nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="3">
+    <button nz-button nzType="primary" class="button_margin"
+      (click)="createTplModal(tplTitle, tplContent, tplFooter)">操作提示</button>
+  </div>
+</div>
+
+  <nz-table #nzTable [nzData]="uploadData" [nzScroll]="{x: '800px'}" nzBordered="true" nzFrontPagination="false">
+    <thead>
+      <tr>
+        <ng-container *ngFor="let item of table_header;let index =index">
+          <th nzWidth="108px" [nzLeft]="index == 0">{{item}}</th>
+        </ng-container>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let i of storeData">
+        <ng-container *ngFor="let a of i; let index =index">
+          <td [nzLeft]="index == 0"  [ngClass]="{'over': a > 6 && a < 32 , 'almost_over': a==6 && a < 32 }" nzWidth="100">
+            {{a}}</td>
+        </ng-container>
+      </tr>
+    </tbody>
+  </nz-table>
+
+  <ng-template #tplContent let-params>
+    <div nz-row >
+          <img src="./../../../../assets/img/over_date_1.jpg" alt="">
+    </div>
+  </ng-template>
+  
+  <ng-template #tplTitle>
+    <div nz-row>
+      <span>批量处理步骤与提示</span>
+    </div>
+  </ng-template>
+  
+  <ng-template #tplFooter let-ref="modalRef">
+      <button nz-button nzType="primary" (click)="ref.destroy()">Close</button>
+  </ng-template>
